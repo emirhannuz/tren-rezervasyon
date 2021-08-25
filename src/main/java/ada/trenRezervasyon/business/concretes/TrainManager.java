@@ -9,75 +9,74 @@ import org.springframework.stereotype.Service;
 
 import ada.trenRezervasyon.business.abstracts.TrainService;
 import ada.trenRezervasyon.business.abstracts.WagonService;
-import ada.trenRezervasyon.business.abstracts.YerlesimService;
+import ada.trenRezervasyon.business.abstracts.PlacementService;
 import ada.trenRezervasyon.core.utilities.business.BusinessRules;
 import ada.trenRezervasyon.core.utilities.results.ErrorResult;
 import ada.trenRezervasyon.core.utilities.results.Result;
 import ada.trenRezervasyon.core.utilities.results.SuccessResult;
 import ada.trenRezervasyon.entities.concretes.Train;
 import ada.trenRezervasyon.entities.concretes.Wagon;
-import ada.trenRezervasyon.entities.concretes.Yerlesim;
+import ada.trenRezervasyon.entities.concretes.Placement;
 import ada.trenRezervasyon.entities.dtos.RezervasyonOutput;
 
 @Service
 public class TrainManager implements TrainService {
 
-	private WagonService vagonService;
-	private YerlesimService yerlesimService;
+	private WagonService wagonService;
+	private PlacementService placementService;
 
 	@Autowired
-	public TrainManager(WagonService vagonService, YerlesimService yerlesimService) {
-		this.vagonService = vagonService;
-		this.yerlesimService = yerlesimService;
+	public TrainManager(WagonService wagonService, PlacementService placementService) {
+		this.wagonService = wagonService;
+		this.placementService = placementService;
 	}
 
 	@Override
 	public RezervasyonOutput placePeopleInSeats(Train train, int numberOfPeople,
-			boolean canPersonsPlacedInDifferentWagons) {
+			boolean canPeoplePlacedInDifferentWagons) {
 
-		RezervasyonOutput rezervasyonOutput = new RezervasyonOutput();
-		List<Yerlesim> yerlesim = new ArrayList<Yerlesim>();
+		RezervasyonOutput reservationOutput = new RezervasyonOutput();
+		List<Placement> placements = new ArrayList<Placement>();
 		List<Wagon> wagons = train.getWagons();
 
 		Result result = BusinessRules.Run(
 				this.checkIfNoReservationableSeatAvailable(
-						this.vagonService.getAvailableSeatsInAllVagon(wagons).getData()),
+						this.wagonService.getAvailableSeatsInAllVagon(wagons).getData()),
 				this.checkIfTotalPeopleMoreThanTotalSeats(wagons, numberOfPeople));
 
 		if (result != null) {
-			rezervasyonOutput.setRezervasyonYapilabilir(false);
-			rezervasyonOutput.setYerlesimAyrinti(yerlesim);
-			return rezervasyonOutput;
+			reservationOutput.setRezervasyonYapilabilir(false);
+			reservationOutput.setYerlesimAyrinti(placements);
+			return reservationOutput;
 		}
 
-		rezervasyonOutput = canPersonsPlacedInDifferentWagons ? 
-				this.placePeopleInDifferentWagon(train, numberOfPeople)
+		reservationOutput = canPeoplePlacedInDifferentWagons ? this.placePeopleInDifferentWagon(train, numberOfPeople)
 				: this.placePeopleInSameWagon(train, numberOfPeople);
 
-		return rezervasyonOutput;
+		return reservationOutput;
 	}
 
 	@Override
 	public RezervasyonOutput placePeopleInSameWagon(Train train, int numberOfPeople) {
 		RezervasyonOutput reservationOutput = new RezervasyonOutput();
-		List<Yerlesim> yerlesim = new ArrayList<Yerlesim>();
+		List<Placement> placements = new ArrayList<Placement>();
 		List<Wagon> wagons = train.getWagons();
 
-		yerlesim = this.yerlesimService.ayniVagonaYerlestir(wagons, numberOfPeople);
+		placements = this.placementService.placeInSameWagon(wagons, numberOfPeople);
 		reservationOutput.setRezervasyonYapilabilir(true);
-		reservationOutput.setYerlesimAyrinti(yerlesim);
+		reservationOutput.setYerlesimAyrinti(placements);
 		return reservationOutput;
 	}
 
 	@Override
 	public RezervasyonOutput placePeopleInDifferentWagon(Train train, int numberOfPeople) {
 		RezervasyonOutput reservationOutput = new RezervasyonOutput();
-		List<Yerlesim> yerlesim = new ArrayList<Yerlesim>();
-		List<Wagon> vagonlar = train.getWagons();
+		List<Placement> placements = new ArrayList<Placement>();
+		List<Wagon> wagons = train.getWagons();
 
-		yerlesim = this.yerlesimService.farkliVagonlaraYerlestir(vagonlar, numberOfPeople);
+		placements = this.placementService.placeInDifferentWagon(wagons, numberOfPeople);
 		reservationOutput.setRezervasyonYapilabilir(true);
-		reservationOutput.setYerlesimAyrinti(yerlesim);
+		reservationOutput.setYerlesimAyrinti(placements);
 		return reservationOutput;
 	}
 
@@ -92,9 +91,9 @@ public class TrainManager implements TrainService {
 		return new ErrorResult("Müsait koltuk bulunamadı.");
 	}
 
-	private Result checkIfTotalPeopleMoreThanTotalSeats(List<Wagon> vagonlar, int kisiSayisi) {
+	private Result checkIfTotalPeopleMoreThanTotalSeats(List<Wagon> wagons, int numberOfPeople) {
 
-		if (this.vagonService.totalAvailableSeatsOnTrain(vagonlar).getData() < kisiSayisi) {
+		if (this.wagonService.totalAvailableSeatsOnTrain(wagons).getData() < numberOfPeople) {
 			return new ErrorResult("Kişilerin sığabileceği kadar yer mevcut değil.");
 		}
 
