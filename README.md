@@ -1,6 +1,6 @@
 ## Tren Rezervasyon Uygulaması
 
-*Bir tren rezervasyonu uygulaması için, istenilen rezervasyonunun yapılıp yapılamayacağını ve yapılabiliyorsa hangi vagon için rezervasyon onaylanabileceğini belirleyen HTTP API.*
+*Bir tren rezervasyonu uygulaması için, istenilen rezervasyonunun yapılıp yapılamayacağını ve yapılabiliyorsa hangi vagon için rezervasyon onaylanabileceğini belirleyen **spring framework** ile geliştirilmiş HTTP API.*
 
 Projeyi test etmek için,
 
@@ -49,3 +49,17 @@ Projeyi test etmek için,
   ]
 }
 ```
+
+### Gereksinimler
+
+- [Bir tren içinde birden fazla vagon bulunabilir.](./img/1.png)
+- [Her vagonun farklı kişi kapasitesi olabilir.](./img/2.png)
+- [Online rezervasyonlarda, bir vagonun doluluk kapasitesi %70'i geçmemelidir. Yani vagon kapasitesi 100 ise ve 70 koltuk dolu ise, o vagona rezervasyon yapılamaz.](./img/3.png)
+- [Bir rezervasyon isteği içinde birden fazla kişi olabilir.](./img/5.png)
+-  [Rezervasyon isteği yapılırken, kişilerin farklı vagonlara yerleşip yerleştirilemeyeceği belirtilir. Bazı rezervasyonlarda tüm yolcuların aynı vagonda olması istenilirken, bazılarında farklı vagonlar da kabul edilebilir.](./img/5.png)
+- [Rezervasyon yapılabilir durumdaysa, API hangi vagonlara kaçar kişi yerleşeceği bilgisini dönecektir.](./img/6.png)
+
+---
+
+ * Java version 11
+ * Spring Boot version 2.5.4
