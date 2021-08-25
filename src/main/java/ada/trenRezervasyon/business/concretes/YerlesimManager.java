@@ -8,22 +8,22 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ada.trenRezervasyon.business.abstracts.VagonService;
+import ada.trenRezervasyon.business.abstracts.WagonService;
 import ada.trenRezervasyon.business.abstracts.YerlesimService;
-import ada.trenRezervasyon.entities.concretes.Vagon;
+import ada.trenRezervasyon.entities.concretes.Wagon;
 import ada.trenRezervasyon.entities.concretes.Yerlesim;
 
 @Service
 public class YerlesimManager implements YerlesimService {
 
-	private VagonService vagonService;
+	private WagonService vagonService;
 
 	@Autowired
-	public YerlesimManager(VagonService vagonService) {
+	public YerlesimManager(WagonService vagonService) {
 		this.vagonService = vagonService;
 	}
 
-	public List<Yerlesim> ayniVagonaYerlestir(List<Vagon> vagonlar, int kisiSayisi) {
+	public List<Yerlesim> ayniVagonaYerlestir(List<Wagon> vagonlar, int kisiSayisi) {
 		List<Yerlesim> yerlesimler = new ArrayList<Yerlesim>();
 
 		Map<String, Integer> availableSeats = this.vagonService.getAvailableSeatsInAllVagon(vagonlar).getData();
@@ -42,7 +42,7 @@ public class YerlesimManager implements YerlesimService {
 		return yerlesimler;
 	}
 
-	public List<Yerlesim> farkliVagonlaraYerlestir(List<Vagon> vagonlar, int kisiSayisi) {
+	public List<Yerlesim> farkliVagonlaraYerlestir(List<Wagon> vagonlar, int kisiSayisi) {
 		List<Yerlesim> yerlesimler = new ArrayList<Yerlesim>();
 
 		Map<String, Integer> availableSeats = this.vagonService.getAvailableSeatsInAllVagon(vagonlar).getData();

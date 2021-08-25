@@ -8,23 +8,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ada.trenRezervasyon.business.abstracts.VagonService;
+import ada.trenRezervasyon.business.abstracts.WagonService;
 import ada.trenRezervasyon.core.utilities.results.Result;
-import ada.trenRezervasyon.entities.concretes.Vagon;
+import ada.trenRezervasyon.entities.concretes.Wagon;
 
 @RestController
-@RequestMapping("api/vagons")
-public class VagonsController {
+@RequestMapping("api/wagons")
+public class WagonsController {
 
-	private VagonService vagonService;
+	private WagonService wagonService;
 
 	@Autowired
-	public VagonsController(VagonService vagonService) {
-		this.vagonService = vagonService;
+	public WagonsController(WagonService wagonService) {
+		this.wagonService = wagonService;
 	}
-	
+
 	@PostMapping("/getAvailableSeatsInAllVagon")
-	public Result howManySeatsAreAvailable(@RequestBody List<Vagon> vagon) {
-		return this.vagonService.getAvailableSeatsInAllVagon(vagon);
+	public Result howManySeatsAreAvailable(@RequestBody List<Wagon> wagons) {
+		return this.wagonService.getAvailableSeatsInAllVagon(wagons);
 	}
 }

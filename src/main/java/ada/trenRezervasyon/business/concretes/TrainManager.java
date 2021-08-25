@@ -8,25 +8,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ada.trenRezervasyon.business.abstracts.TrainService;
-import ada.trenRezervasyon.business.abstracts.VagonService;
+import ada.trenRezervasyon.business.abstracts.WagonService;
 import ada.trenRezervasyon.business.abstracts.YerlesimService;
 import ada.trenRezervasyon.core.utilities.business.BusinessRules;
 import ada.trenRezervasyon.core.utilities.results.ErrorResult;
 import ada.trenRezervasyon.core.utilities.results.Result;
 import ada.trenRezervasyon.core.utilities.results.SuccessResult;
 import ada.trenRezervasyon.entities.concretes.Train;
-import ada.trenRezervasyon.entities.concretes.Vagon;
+import ada.trenRezervasyon.entities.concretes.Wagon;
 import ada.trenRezervasyon.entities.concretes.Yerlesim;
 import ada.trenRezervasyon.entities.dtos.RezervasyonOutput;
 
 @Service
 public class TrainManager implements TrainService {
 
-	private VagonService vagonService;
+	private WagonService vagonService;
 	private YerlesimService yerlesimService;
 
 	@Autowired
-	public TrainManager(VagonService vagonService, YerlesimService yerlesimService) {
+	public TrainManager(WagonService vagonService, YerlesimService yerlesimService) {
 		this.vagonService = vagonService;
 		this.yerlesimService = yerlesimService;
 	}
@@ -37,7 +37,7 @@ public class TrainManager implements TrainService {
 
 		RezervasyonOutput rezervasyonOutput = new RezervasyonOutput();
 		List<Yerlesim> yerlesim = new ArrayList<Yerlesim>();
-		List<Vagon> wagons = train.getWagons();
+		List<Wagon> wagons = train.getWagons();
 
 		Result result = BusinessRules.Run(
 				this.checkIfNoReservationableSeatAvailable(
@@ -61,7 +61,7 @@ public class TrainManager implements TrainService {
 	public RezervasyonOutput placePeopleInSameWagon(Train train, int numberOfPeople) {
 		RezervasyonOutput reservationOutput = new RezervasyonOutput();
 		List<Yerlesim> yerlesim = new ArrayList<Yerlesim>();
-		List<Vagon> wagons = train.getWagons();
+		List<Wagon> wagons = train.getWagons();
 
 		yerlesim = this.yerlesimService.ayniVagonaYerlestir(wagons, numberOfPeople);
 		reservationOutput.setRezervasyonYapilabilir(true);
@@ -73,7 +73,7 @@ public class TrainManager implements TrainService {
 	public RezervasyonOutput placePeopleInDifferentWagon(Train train, int numberOfPeople) {
 		RezervasyonOutput reservationOutput = new RezervasyonOutput();
 		List<Yerlesim> yerlesim = new ArrayList<Yerlesim>();
-		List<Vagon> vagonlar = train.getWagons();
+		List<Wagon> vagonlar = train.getWagons();
 
 		yerlesim = this.yerlesimService.farkliVagonlaraYerlestir(vagonlar, numberOfPeople);
 		reservationOutput.setRezervasyonYapilabilir(true);
@@ -92,7 +92,7 @@ public class TrainManager implements TrainService {
 		return new ErrorResult("Müsait koltuk bulunamadı.");
 	}
 
-	private Result checkIfTotalPeopleMoreThanTotalSeats(List<Vagon> vagonlar, int kisiSayisi) {
+	private Result checkIfTotalPeopleMoreThanTotalSeats(List<Wagon> vagonlar, int kisiSayisi) {
 
 		if (this.vagonService.totalAvailableSeatsOnTrain(vagonlar).getData() < kisiSayisi) {
 			return new ErrorResult("Kişilerin sığabileceği kadar yer mevcut değil.");

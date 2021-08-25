@@ -7,7 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ada.trenRezervasyon.business.abstracts.VagonService;
+import ada.trenRezervasyon.business.abstracts.WagonService;
 import ada.trenRezervasyon.core.utilities.business.BusinessRules;
 import ada.trenRezervasyon.core.utilities.results.DataResult;
 import ada.trenRezervasyon.core.utilities.results.ErrorDataResult;
@@ -15,36 +15,36 @@ import ada.trenRezervasyon.core.utilities.results.ErrorResult;
 import ada.trenRezervasyon.core.utilities.results.Result;
 import ada.trenRezervasyon.core.utilities.results.SuccessDataResult;
 import ada.trenRezervasyon.core.utilities.results.SuccessResult;
-import ada.trenRezervasyon.entities.concretes.Vagon;
+import ada.trenRezervasyon.entities.concretes.Wagon;
 
 @Service
-public class VagonManager implements VagonService {
+public class WagonManager implements WagonService {
 
 	@Autowired
-	public VagonManager() {
+	public WagonManager() {
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public DataResult<Map<String, Integer>> getAvailableSeatsInAllVagon(List<Vagon> vagonlar) {
+	public DataResult<Map<String, Integer>> getAvailableSeatsInAllVagon(List<Wagon> wagons) {
 		Map<String, Integer> availableSeats = new HashMap<String, Integer>();
-		for (Vagon vagon : vagonlar) {
-			DataResult<Integer> result = this.howManySeatsAreAvailable(vagon);
-			availableSeats.put(vagon.getAd(), result.getData());
+		for (Wagon wagon : wagons) {
+			DataResult<Integer> result = this.howManySeatsAreAvailable(wagon);
+			availableSeats.put(wagon.getName(), result.getData());
 		}
 		return new SuccessDataResult<Map<String, Integer>>(availableSeats);
 	}
 
 	@Override
-	public DataResult<Integer> totalAvailableSeatsOnTrain(List<Vagon> vagonlar) {
+	public DataResult<Integer> totalAvailableSeatsOnTrain(List<Wagon> wagons) {
 		int totalAvailableSeats = 0;
 
-		for (Vagon vagon : vagonlar) {
-			totalAvailableSeats += this.howManySeatsAreAvailable(vagon).getData();
+		for (Wagon wagon : wagons) {
+			totalAvailableSeats += this.howManySeatsAreAvailable(wagon).getData();
 		}
-		
+
 		if (totalAvailableSeats == 0) {
-			return new ErrorDataResult<Integer>("Trende boş yer yok");
+			return new ErrorDataResult<Integer>("Trende boş yer yok.");
 		}
 		System.out.println(totalAvailableSeats);
 		return new SuccessDataResult<Integer>(totalAvailableSeats);
@@ -52,22 +52,21 @@ public class VagonManager implements VagonService {
 
 	/* private methods */
 
-	private Result checkIfVagonAvailable(Vagon vagon) {
-		if (vagon.getKapasite() * 7 / 10 < vagon.getDoluKoltukAdet()) {
+	private Result checkIfWagonAvailable(Wagon wagon) {
+		if (wagon.getCapacity() * 7 / 10 < wagon.getNumberOfFullSeats()) {
 			return new ErrorResult("Bu vagona rezervasyon yapılamaz.");
 		}
 		return new SuccessResult();
 	}
 
-
-	private DataResult<Integer> howManySeatsAreAvailable(Vagon vagon) {
-		Result result = BusinessRules.Run(this.checkIfVagonAvailable(vagon));
+	private DataResult<Integer> howManySeatsAreAvailable(Wagon wagon) {
+		Result result = BusinessRules.Run(this.checkIfWagonAvailable(wagon));
 
 		if (result != null) {
 			return new ErrorDataResult<Integer>(0, result.getMessage());
 		}
 
-		int availableSeatsCount = vagon.getKapasite() * 7 / 10 - vagon.getDoluKoltukAdet();
+		int availableSeatsCount = wagon.getCapacity() * 7 / 10 - wagon.getNumberOfFullSeats();
 
 		return new SuccessDataResult<Integer>(availableSeatsCount);
 	}
