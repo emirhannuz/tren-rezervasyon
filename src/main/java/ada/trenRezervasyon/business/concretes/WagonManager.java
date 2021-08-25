@@ -28,10 +28,12 @@ public class WagonManager implements WagonService {
 	@Override
 	public DataResult<Map<String, Integer>> getAvailableSeatsInAllVagon(List<Wagon> wagons) {
 		Map<String, Integer> availableSeats = new HashMap<String, Integer>();
+
 		for (Wagon wagon : wagons) {
 			DataResult<Integer> result = this.howManySeatsAreAvailable(wagon);
 			availableSeats.put(wagon.getName(), result.getData());
 		}
+
 		return new SuccessDataResult<Map<String, Integer>>(availableSeats);
 	}
 
@@ -44,14 +46,14 @@ public class WagonManager implements WagonService {
 		}
 
 		if (totalAvailableSeats == 0) {
-			return new ErrorDataResult<Integer>("Trende boş yer yok.");
+			return new ErrorDataResult<Integer>(0, "Trende boş yer yok.");
 		}
-		System.out.println(totalAvailableSeats);
+
 		return new SuccessDataResult<Integer>(totalAvailableSeats);
 	}
 
-	/* private methods */
-
+	
+	
 	private Result checkIfWagonAvailable(Wagon wagon) {
 		if (wagon.getCapacity() * 7 / 10 < wagon.getNumberOfFullSeats()) {
 			return new ErrorResult("Bu vagona rezervasyon yapılamaz.");

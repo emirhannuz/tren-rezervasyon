@@ -24,8 +24,8 @@ public class PlacementManager implements PlacementService {
 	}
 
 	public List<Placement> placeInSameWagon(List<Wagon> wagons, int numberOfPeople) {
-		List<Placement> placements = new ArrayList<Placement>();
 
+		List<Placement> placements = new ArrayList<Placement>();
 		Map<String, Integer> availableSeats = this.wagonService.getAvailableSeatsInAllVagon(wagons).getData();
 
 		for (String wagonName : availableSeats.keySet()) {
@@ -43,10 +43,9 @@ public class PlacementManager implements PlacementService {
 	}
 
 	public List<Placement> placeInDifferentWagon(List<Wagon> wagons, int numberOfPeople) {
+
 		List<Placement> placements = new ArrayList<Placement>();
-
 		Map<String, Integer> availableSeats = this.wagonService.getAvailableSeatsInAllVagon(wagons).getData();
-
 		Map<String, Integer> placedWagons = new HashMap<String, Integer>();
 
 		for (String wagonName : availableSeats.keySet()) {
@@ -68,6 +67,7 @@ public class PlacementManager implements PlacementService {
 			}
 
 		}
+
 		for (String wagonName : placedWagons.keySet()) {
 			int numberOfPeoplePlacedInWagon = placedWagons.get(wagonName);
 			if (numberOfPeoplePlacedInWagon > 0) {

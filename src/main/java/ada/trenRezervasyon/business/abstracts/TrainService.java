@@ -1,14 +1,13 @@
 package ada.trenRezervasyon.business.abstracts;
 
+import ada.trenRezervasyon.core.utilities.results.DataResult;
 import ada.trenRezervasyon.entities.concretes.Train;
-import ada.trenRezervasyon.entities.dtos.RezervasyonOutput;
+import ada.trenRezervasyon.entities.dtos.ReservationOutput;
 
 public interface TrainService {
 
-	
-	RezervasyonOutput placePeopleInSeats(Train train, int numberOfPeople, boolean canPeoplePlacedInDifferentWagons);
-	
-	RezervasyonOutput placePeopleInSameWagon(Train train, int numberOfPeople);
+	DataResult<ReservationOutput> placePeopleInSeats(Train train, int numberOfPeople,
+			boolean canPeoplePlacedInDifferentWagons);
 
-	RezervasyonOutput placePeopleInDifferentWagon(Train train, int numberOfPeople);
+
 }
