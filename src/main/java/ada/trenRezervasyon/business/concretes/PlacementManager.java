@@ -48,10 +48,12 @@ public class PlacementManager implements PlacementService {
 		Map<String, Integer> availableSeats = this.wagonService.getAvailableSeatsInAllVagon(wagons).getData();
 		Map<String, Integer> placedWagons = new HashMap<String, Integer>();
 
+		/* vagonlara yerleştirilmiş kişi sayısını 0 yapar. */
 		for (String wagonName : availableSeats.keySet()) {
 			placedWagons.put(wagonName, 0);
 		}
 
+		/* kişileri vagonlara yerleştir. */
 		while (numberOfPeople > 0) {
 			for (String wagonName : availableSeats.keySet()) {
 				int numberOfSeat = availableSeats.get(wagonName);
@@ -67,6 +69,13 @@ public class PlacementManager implements PlacementService {
 			}
 
 		}
+
+		placements = this.getFilledWagons(placedWagons);
+		return placements;
+	}
+
+	private List<Placement> getFilledWagons(Map<String, Integer> placedWagons) {
+		List<Placement> placements = new ArrayList<Placement>();
 
 		for (String wagonName : placedWagons.keySet()) {
 			int numberOfPeoplePlacedInWagon = placedWagons.get(wagonName);
