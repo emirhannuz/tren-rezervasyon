@@ -1,5 +1,7 @@
 package ada.trenRezervasyon.entities.dtos;
 
+import java.util.List;
+
 import ada.trenRezervasyon.entities.concretes.Yerlesim;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,6 +14,6 @@ public class RezervasyonOutput {
 
 	private boolean rezervasyonYapilabilir;
 
-	private Yerlesim[] yerlesimAyrinti;
+	private List<Yerlesim> yerlesimAyrinti;
 
 }

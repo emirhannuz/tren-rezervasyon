@@ -1,5 +1,7 @@
 package ada.trenRezervasyon.entities.concretes;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,5 +13,5 @@ public class Tren {
 
 	private String ad;
 
-	private Vagon[] vagonlar;
+	private List<Vagon> vagonlar;
 }
