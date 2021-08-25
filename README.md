@@ -61,5 +61,5 @@ Projeyi test etmek için,
 
 ---
 
- * Java version 11
- * Spring Boot version 2.5.4
+ * *Java version **11***
+ * *Spring Boot version **2.5.4***
