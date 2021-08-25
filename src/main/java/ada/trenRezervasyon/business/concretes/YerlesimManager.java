@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import ada.trenRezervasyon.business.abstracts.VagonService;
 import ada.trenRezervasyon.business.abstracts.YerlesimService;
-import ada.trenRezervasyon.core.utilities.business.BusinessRules;
-import ada.trenRezervasyon.core.utilities.results.Result;
 import ada.trenRezervasyon.entities.concretes.Vagon;
 import ada.trenRezervasyon.entities.concretes.Yerlesim;
 

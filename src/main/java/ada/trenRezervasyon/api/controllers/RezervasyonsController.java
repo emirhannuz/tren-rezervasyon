@@ -21,8 +21,8 @@ public class RezervasyonsController {
 		this.rezervasyonService = rezervasyonService;
 	}
 
-	@PostMapping("/rezerve-et")
-	public RezervasyonOutput KisileriYerlestir(@RequestBody RezervasyonInput rezervasyonInput) {
-		return this.rezervasyonService.KisileriYerlestir(rezervasyonInput);
+	@PostMapping("/reserve")
+	public RezervasyonOutput reserve(@RequestBody RezervasyonInput rezervasyonInput) {
+		return this.rezervasyonService.reserve(rezervasyonInput);
 	}
 }

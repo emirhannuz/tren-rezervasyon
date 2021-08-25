@@ -4,33 +4,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ada.trenRezervasyon.business.abstracts.RezervasyonService;
-import ada.trenRezervasyon.business.abstracts.TrenService;
-import ada.trenRezervasyon.entities.concretes.Tren;
+import ada.trenRezervasyon.business.abstracts.TrainService;
+import ada.trenRezervasyon.entities.concretes.Train;
 import ada.trenRezervasyon.entities.dtos.RezervasyonInput;
 import ada.trenRezervasyon.entities.dtos.RezervasyonOutput;
-
 
 @Service
 public class RezervasyonManager implements RezervasyonService {
 
-	private TrenService trenService;
+	private TrainService trenService;
 
 	@Autowired
-	public RezervasyonManager(TrenService trenService) {
+	public RezervasyonManager(TrainService trenService) {
 		this.trenService = trenService;
 	}
 
-	public RezervasyonOutput KisileriYerlestir(RezervasyonInput rezervasyonInput) {
+	public RezervasyonOutput reserve(RezervasyonInput rezervasyonInput) {
 		RezervasyonOutput output;
 
-		Tren tren = rezervasyonInput.getTren();
-		int kisiSayisi = rezervasyonInput.getRezervasyonYapilacakKisiSayisi();
+		Train train = rezervasyonInput.getTren();
+		int numberOfPeople = rezervasyonInput.getRezervasyonYapilacakKisiSayisi();
+		boolean canPersonsPlacedInDifferentWagons = rezervasyonInput.isKisilerFarkliVagonlaraYerlestirilebilir();
 
-		if (!rezervasyonInput.isKisilerFarkliVagonlaraYerlestirilebilir()) {
-			output = trenService.kisileriAyniVagonaYerlestir(tren, kisiSayisi);
-		} else {
-			output = trenService.kisileriFarkliVagonlaraYerlestir(tren, kisiSayisi);
-		}
+		output = this.trenService.placePeopleInSeats(train, numberOfPeople, canPersonsPlacedInDifferentWagons);
 
 		return output;
 	}

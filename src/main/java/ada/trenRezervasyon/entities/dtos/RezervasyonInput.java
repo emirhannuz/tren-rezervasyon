@@ -1,6 +1,6 @@
 package ada.trenRezervasyon.entities.dtos;
 
-import ada.trenRezervasyon.entities.concretes.Tren;
+import ada.trenRezervasyon.entities.concretes.Train;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RezervasyonInput {
 	
-	private Tren tren;
+	private Train tren;
 	
 	private int rezervasyonYapilacakKisiSayisi;
 	

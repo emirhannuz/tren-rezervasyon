@@ -52,7 +52,6 @@ public class VagonManager implements VagonService {
 
 	/* private methods */
 
-	/* works fine */
 	private Result checkIfVagonAvailable(Vagon vagon) {
 		if (vagon.getKapasite() * 7 / 10 < vagon.getDoluKoltukAdet()) {
 			return new ErrorResult("Bu vagona rezervasyon yapılamaz.");
@@ -60,7 +59,7 @@ public class VagonManager implements VagonService {
 		return new SuccessResult();
 	}
 
-	/* works fine */
+
 	private DataResult<Integer> howManySeatsAreAvailable(Vagon vagon) {
 		Result result = BusinessRules.Run(this.checkIfVagonAvailable(vagon));
 
